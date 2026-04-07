@@ -11,6 +11,11 @@ public class UserRequest {
     @NotBlank(message = "メールは必須です")
     private String email;
 
+    @NotBlank(message = "パスワードは必須です")
+    private String password;
+
+
+
     public String getName() {
         return name;
     }
@@ -23,6 +28,13 @@ public class UserRequest {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
     // Getters and setters
 }

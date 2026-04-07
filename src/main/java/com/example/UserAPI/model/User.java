@@ -1,7 +1,15 @@
 package com.example.UserAPI.model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String password;
     private String name;
     private String email;
 
@@ -20,9 +28,15 @@ public class User {
     }
 
     public String getEmail() {
-        return email;
-    }
+        return email;    }
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public String getPassword() {
+        return password;
     }
 }
