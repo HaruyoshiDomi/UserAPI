@@ -22,19 +22,6 @@ public class JwtUtil {
     }
 
     //トークンからメールを抽出
-    private static String extractEmail(String token) // アクセス修飾子をprivateに変更
-    {
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody()
-                    .getSubject();
-        } catch (JwtException e) {
-            return null; // トークンが無効な場合
-        }
-    }
 
     public static String validateToken(String token) {
     Claims claims = Jwts.parserBuilder()

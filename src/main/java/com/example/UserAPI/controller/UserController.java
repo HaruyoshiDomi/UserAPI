@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/Users")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -41,7 +41,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/Search")
+    @GetMapping("/search")
     public List<UserResponse> searchUsers(@RequestParam String name) {
         return userService.searchByName(name).stream()
                 .map(user -> new UserResponse(
