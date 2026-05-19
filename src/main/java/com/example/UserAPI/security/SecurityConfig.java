@@ -16,6 +16,14 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Postman用にOFF
             .httpBasic(httpBasic -> httpBasic.disable())
             .authorizeHttpRequests(auth -> auth
+                 // HTML許可
+                .requestMatchers(
+                    "/",
+                    "/login-page",
+                    "/*.html",
+                    "/css/**",
+                    "/js/**"
+                ).permitAll()
                 .requestMatchers("/auth/login","/Users").permitAll() // ログインは全てのユーザーに許可
                 .requestMatchers("/cart/**").authenticated()
                 .anyRequest().authenticated()

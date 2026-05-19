@@ -1,5 +1,7 @@
 package com.example.UserAPI.controller;
 
+import java.util.Map;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
+    public Map<String, String> login(@RequestBody LoginRequest request) {
         //DBからユーザーを取得
         User user = userService.findByEmail(request.getEmail());
 
@@ -39,8 +41,9 @@ public class AuthController {
             throw new RuntimeException("Invalid password");
         }
         
+        String token = JwtUtil.generateToken(user.getEmail());
         //ログイン成功(JWT発行)
-        return JwtUtil.generateToken(user.getEmail());
+        return Map.of("token",token);
     }
     
 }
