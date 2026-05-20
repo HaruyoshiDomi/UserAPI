@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>商品詳細</title>
+</head>
+
+<body>
+
+<h1>商品詳細</h1>
+
+<div id="product-detail"></div>
+
+<script>
+
+async function loadProduct() {
+
+    // JWT取得
+    const token = localStorage.getItem("token");
+
+    // URLからid取得
+    const params =
+        new URLSearchParams(window.location.search);
+
+    const productId = params.get("id");
+
+    console.log(productId);
+
+    // API呼び出し
+    const response = await fetch(
+        "/products/" + productId,
+        {
+            method: "GET",
+
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        }
+    );
+
+    // JSON変換
+    const product = await response.json();
+
+    console.log(product);
+
+    // HTML取得
+    const detail =
+        document.getElementById("product-detail");
+
+    // HTML表示
+    detail.innerHTML = `
+        <h2>${product.name}</h2>
+        <p>価格: ${product.price}円</p>
+            <button onclick="addCart(${product.id})">
+                カートに追加
+            </button>
+
+            <p id="message"></p>
+    `;
+}
+
+async function addCart(productId) {
+
+    // JWT取得
+    const token = localStorage.getItem("token");
+
+    // API呼び出し
+    const response = await fetch("/cart/add", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+
+        body: JSON.stringify({
+            productId: productId,
+            quantity: 1
+        })
+    });
+
+    // 成功判定
+    if (response.ok) {
+
+        document.getElementById("message")
+            .innerText = "カート追加成功";
+
+    } else {
+
+        document.getElementById("message")
+            .innerText = "カート追加失敗";
+    }
+}
+
+// 実行
+loadProduct();
+
+</script>
+
+</body>
+</html>

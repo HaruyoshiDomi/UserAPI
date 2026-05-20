@@ -15,7 +15,7 @@ public class CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-
+    
     public CartService(CartRepository cartRepository, ProductRepository productRepository, UserRepository userRepository) {
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
@@ -23,10 +23,7 @@ public class CartService {
     }
 
     //カートに商品を追加
-    public void addToCart(CartRequest cartRequest) {
-        
-        //JWTからユーザー情報を取得
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    public void addToCart(CartRequest cartRequest, String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("ユーザーが存在しません"));
 
@@ -43,9 +40,8 @@ public class CartService {
     }
 
     //カート内の商品を取得
-    public List<CartResponse> getCartList() {
+    public List<CartResponse> getCartList(String email) {
         //JWTからユーザー情報を取得
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("ユーザーが存在しません"));
 

@@ -10,7 +10,67 @@
 
 <h1>商品一覧</h1>
 
-<p>ログイン成功！</p>
+<!-- 商品一覧表示エリア -->
+<div id="product-list"></div>
+
+<script>
+
+async function loadProducts() {
+
+    // localStorageからJWT取得
+    const token = localStorage.getItem("token");
+
+    // API呼び出し
+    const response = await fetch("/products", {
+
+        method: "GET",
+
+        headers: {
+            "Authorization": "Bearer " + token
+        }
+    });
+
+    // JSON変換
+    const products = await response.json();
+
+    console.log(products);
+
+    // HTML表示用
+    const productList =
+        document.getElementById("product-list");
+
+    // 商品ループ
+    products.forEach(product => {
+
+        // div作成
+        const div = document.createElement("div");
+
+        // 商品情報設定
+        div.innerHTML = `
+            <hr>
+            <h3>${product.name}</h3>
+            <p>価格: ${product.price}円</p>
+
+            <button onclick="moveDetail(${product.id})">
+                詳細を見る
+            </button>
+        `;
+
+        // HTMLへ追加
+        productList.appendChild(div);
+    });
+}
+
+function moveDetail(productId) {
+
+    window.location.href =
+        "/product-detail.html?id=" + productId;
+}
+
+// 画面読み込み時実行
+loadProducts();
+
+</script>
 
 </body>
 </html>
