@@ -67,10 +67,18 @@ function moveDetail(productId) {
         "/product-detail.html?id=" + productId;
 }
 
+function moveCart() {
+
+    window.location.href = "/cart.html";
+}
 // 画面読み込み時実行
 loadProducts();
 
 </script>
+
+<button onclick="moveCart()">
+    カートを見る
+</button>
 
 </body>
 </html>

@@ -7,7 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CartResponse {
     
-    private Long produckId;
+    private Long cartId;
+    private Long productId;
     private String productName;
     private Double price;
     private int quantity;

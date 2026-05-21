@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
 @RequestMapping("/cart")
@@ -29,4 +33,20 @@ public class CartController {
         String email = authentication.getName();
         return cartService.getCartList(email);
     }
+
+    @DeleteMapping("/{id}")
+    public void removeFromCart(@PathVariable Long id) {
+        cartService.removeFromCart(id);
+    }
+
+    @PutMapping("/{id}/increase")
+    public void increaseQuantity(@PathVariable Long id) {
+        cartService.increaseQuantity(id);
+    }
+
+    @PutMapping("/{id}/decrease")
+    public void decreaseQuantity(@PathVariable Long id) {
+        cartService.decreaseQuantity(id);
+    }
+
 }

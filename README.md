@@ -1,212 +1,137 @@
-# 🛒 簡易ECサイトAPI（Spring Boot + JWT）
+# 🛒 簡易ECサイトAPI
+
+Spring Boot + JWT認証 + MySQL + Docker を利用して作成した、
+簡易ECサイトのWebアプリケーションです。
+
+ログイン認証、商品一覧、カート機能、注文機能を実装し、
+フロントエンドからREST APIを呼び出す構成で開発しました。
 
 ---
 
-## 📌 概要
+# 📌 概要
 
-本プロジェクトは、JWT認証を用いた簡易ECサイトのバックエンドAPIです。
-ユーザー認証から商品閲覧、カート管理、注文、注文履歴取得まで、一連のEC機能を実装しています。
+SES待機期間中のJava学習アウトプットとして開発しました。
 
----
-
-## 🚀 使用技術
-
-* Java（Spring Boot）
-* Spring Security（JWT認証）
-* Spring Data JPA / Hibernate
-* MySQL
-* Maven
-* Postman（API動作確認）
+Spring Boot を用いた REST API 開発だけでなく、
+JWT認証・DB設計・Docker・JavaScriptによる画面連携まで、
+実務を意識した構成で実装しています。
 
 ---
 
-## 🎯 機能一覧
+# 🚀 使用技術
 
-### 🔐 認証
-*ユーザー登録（POST /users）
-* ログイン（JWTトークン発行）
+## バックエンド
 
-### 📦 商品機能
+- Java 17
+- Spring Boot
+- Spring Security
+- Spring Data JPA
+- Hibernate
 
-* 商品一覧取得（GET /products）
-* 商品詳細取得（GET /products/{id}）
+## フロントエンド
 
-### 🛒 カート機能
+- HTML
+- JavaScript
+- Fetch API
+- Thymeleaf
 
-* カート追加（POST /cart）
-* カート一覧取得（GET /cart）
+## DB / ミドルウェア
 
-### 🧾 注文機能
+- MySQL
+- Maven
 
-* 注文実行（POST /orders）
-* 注文履歴取得（GET /orders）
-* 合計金額計算機能
+## インフラ / 開発環境
 
----
-
-## 📡 API仕様
-
----
-
-### 👤 ユーザー登録
-```
-POST /users
-```
-#### Request
-
-```json
-{
-  "name": "Domi",
-  "email": "domi@example.com",
-  "password": "password"
-}
-```
-
-#### Response
-
-```json
-{
-  "id": 1,
-  "name": "Domi",
-  "email": "domi@example.com"
-}
-```
+- Docker
+- Docker Compose
+- Postman
 
 ---
 
-### 🔐 ログイン
+# 🎯 実装機能
 
-```
-POST /login
-```
+## 🔐 認証機能
 
-#### Request
+- ユーザー登録
+- ログイン
+- JWTトークン発行
+- JWT認証 / 認可
 
-```json
-{
-  "email": "test@example.com",
-  "password": "password"
-}
-```
+## 📦 商品機能
 
-#### Response
+- 商品一覧取得
+- 商品詳細取得
 
-```json
-{
-  "token": "JWT_TOKEN"
-}
-```
+## 🛒 カート機能
 
----
+- カート追加
+- カート一覧表示
+- 数量増減
+- カート削除
+- 合計金額計算
 
-### 📦 商品一覧取得
+## 🧾 注文機能
 
-```
-GET /products
-```
+- 注文実行
+- 注文履歴取得
 
 ---
 
-### 📦 商品詳細取得
+# 🖥 フロントエンド実装
 
-```
-GET /products/{id}
-```
-
----
-
-### 🛒 カート追加
-
-```
-POST /cart
-```
-
-#### Header
-
-```
-Authorization: Bearer {JWT}
-```
-
-#### Request
-
-```json
-{
-  "productId": 1,
-  "quantity": 2
-}
-```
+- HTML / JavaScript による画面作成
+- Fetch API を用いた REST API 非同期通信
+- JWTトークンを localStorage に保存
+- Authorization Bearer Token による認証付き通信
+- DOM操作による動的画面更新
+- 数量変更時のリアルタイム再描画
+- 金額表示のカンマ区切り対応（toLocaleString）
 
 ---
 
-### 🛒 カート一覧取得
+# 📡 API一覧
 
-```
-GET /cart
-```
-
-#### Header
-
-```
-Authorization: Bearer {JWT}
-```
-
----
-
-### 🧾 注文実行
-
-```
-POST /orders
-```
-
-#### Header
-
-```
-Authorization: Bearer {JWT}
-```
+| Method | URL | 内容 |
+|---|---|---|
+| POST | /users | ユーザー登録 |
+| POST | /auth/login | ログイン |
+| GET | /products | 商品一覧 |
+| GET | /products/{id} | 商品詳細 |
+| POST | /cart | カート追加 |
+| GET | /cart | カート一覧 |
+| PUT | /cart/{id}/increase | 数量増加 |
+| PUT | /cart/{id}/decrease | 数量減少 |
+| DELETE | /cart/{id} | カート削除 |
+| POST | /orders | 注文 |
+| GET | /orders | 注文履歴 |
 
 ---
 
-### 🧾 注文履歴取得
+# 🧱 アーキテクチャ
 
-```
-GET /orders
+レイヤードアーキテクチャを採用。
+
+```plaintext
+Controller
+  ↓
+Service
+  ↓
+Repository
+  ↓
+MySQL
 ```
 
-#### Header
-
-```
-Authorization: Bearer {JWT}
-```
-
-#### Response例
-
-```json
-[
-  {
-    "orderId": 1,
-    "orderDate": "2026-04-08T12:00:00",
-    "items": [
-      {
-        "productId": 1,
-        "productName": "iPhone",
-        "price": 120000,
-        "quantity": 1
-      }
-    ],
-    "totalAmount": 120000
-  }
-]
-```
+DTOを利用し、
+Entityを直接返却しない構成で実装しています。
 
 ---
 
-## 🧱 ER図（簡易）
+# 🧱 ER図（簡易）
 
-```
+```plaintext
 User
  ├── Cart
- │    └── CartItem
- │         └── Product
+ │    └── Product
  │
  └── Order
       └── OrderItem
@@ -215,77 +140,78 @@ User
 
 ---
 
-## 🛠 実行方法
+# 🐳 起動方法
 
-### ① リポジトリをクローン
+## Docker起動
 
+```bash
+docker-compose up --build
 ```
-git clone <https://github.com/HaruyoshiDomi/UserAPI.git>
-```
 
----
+## アクセス
 
-### ② データベース設定
-
-application.properties または application.yml にDB設定を記載
-
-（例：H2使用時）
-
-```
-spring.datasource.url=jdbc:h2:mem:testdb
+```plaintext
+http://localhost:8080/login-page
 ```
 
 ---
 
-### ③ アプリ起動
+# 🔑 API利用手順
 
-```
-mvn spring-boot:run
-```
-
----
-
-### ④ API実行手順（Postman推奨）
-
-1. `/users` でユーザー登録
-2. `/login` でJWT取得
-3. `/products` で商品確認
-4. `/cart` で商品追加
-5. `/orders` で注文
-6. `/orders` で履歴確認
+1. ユーザー登録
+2. ログイン
+3. JWT取得
+4. 商品一覧取得
+5. カート追加
+6. 注文実行
+7. 注文履歴取得
 
 ---
 
-## 💡 工夫した点
+# 💡 工夫した点
 
-* JWTによる認証・認可の実装
-* ユーザーごとのデータ分離（カート・注文）
-* DTOを用いたレスポンス設計
-* 注文時の合計金額計算ロジック実装
-* レイヤードアーキテクチャ（Controller / Service / Repository）
-
----
-
-## 🚀 今後の改善点
-
-* 在庫管理機能の追加
-* ページング対応（Pageable）
-* 例外ハンドリングの強化（@ControllerAdvice）
-* 決済機能の追加
-* フロントエンド（Reactなど）との連携
+- JWTによる認証・認可実装
+- ユーザーごとのカート分離
+- カート追加時の数量加算対応
+- DTOによるレスポンス設計
+- RESTful API設計
+- Dockerによる開発環境構築
+- SPAライクな画面動作
 
 ---
 
-## 👤 作成者
+# 📚 学んだこと
 
-* 名前：道見治好
-* スキル：Java / Spring Boot / C++
+- Spring Security を用いた JWT認証
+- REST API設計
+- Fetch API による非同期通信
+- Dockerを利用した開発環境構築
+- フロントとバックエンドの連携方法
+- JPAによるDB操作
+- レイヤードアーキテクチャ設計
+
+---
+
+# 🚀 今後追加したい機能
+
+- 商品検索
+- 商品画像表示
+- 管理者画面
+- 在庫管理
+- Pageable対応
+- 例外ハンドリング強化
+- React化
 
 ---
 
-## 📌 補足
+# 👤 作成者
 
-本プロジェクトは学習目的で作成した簡易的なECサイトAPIです。
-実務を想定した設計・実装を意識して開発しています。
+- 道見治好
+- Java / Spring Boot / C++
 
 ---
+
+# 📌 補足
+
+本プロジェクトは学習目的で作成した個人開発アプリです。
+実務を意識した設計・実装を行っています。
